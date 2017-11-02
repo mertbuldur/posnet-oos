@@ -1,49 +1,5 @@
 <?php
-    /*
-     * posnet_oos_struct.php
-     *
-     */
 
-     /**
-     * @package posnet oos
-     */
-
-    /**
-     * It is used for a template class for merchant info
-     */
-    class MerchantInfo {
-        /**
-         * Posnet ID (1 - 6 char)
-         * @var string
-         */
-        var $posnetid = "";
-        /**
-         * Merchant ID (10 char)
-         * @var string
-         */
-        var $mid = "";
-        /**
-         * Terminal ID (8 char)
-         * @var string
-         */
-        var $tid = "";
-        /**
-         * Username (8 char) for being used to login Posnet XML Service
-         * @var string
-         */
-        var $username = "";
-        /**
-         * Password (8 char) for being used to login Posnet XML Service
-         * @var string
-         */
-        var $password = "";
-         /**
-         * @var string
-         */
-        var $enckey = "";
-    };
-     
-     
     /**
      * It is used for a template class for transaction requests
      */
@@ -129,9 +85,9 @@
     class PosnetOOSResponse {
         /**
          * Result of transaction (1 char). Shows if the transaction was approved.
-         *  '0’: Approved
-         *  ’1’: Not approved
-         *  ’2’: Approved just before a time
+         *  '0ï¿½: Approved
+         *  ï¿½1ï¿½: Not approved
+         *  ï¿½2ï¿½: Approved just before a time
          * @var string
          */
         var $approved;
