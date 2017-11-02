@@ -20,8 +20,8 @@
     },
     "autoload": {
         "files": [
-            "vendor/posnet/Posnet XML/posnet.php",
-            "vendor/posnet/Posnet OOS/posnet_oos.php"
+            "posnet/PosnetXML/posnet.php",
+            "posnet/PosnetOOS/posnet_oos.php"
         ],
         "psr-0": {"SanalPos": "src/"}
     }

@@ -1,11 +1,15 @@
-<?php namespace SanalPos;
+<?php
 
-class BasePos {
+namespace SanalPos;
+
+class BasePos
+{
     /**
-     * Kontrol methodları
+     * Kontrol methodları.
      */
+
     /**
-     * Tüm kontrolleri yap
+     * Tüm kontrolleri yap.
      *
      * @return bool
      */
@@ -13,9 +17,9 @@ class BasePos {
     {
         return $this->krediKartiKontrolleri() and $this->siparisKontrolleri();
     }
-    
+
     /**
-     * Kredi kartı için tüm kontrolleri yapan method
+     * Kredi kartı için tüm kontrolleri yapan method.
      *
      * @return bool
      */
@@ -25,7 +29,7 @@ class BasePos {
     }
 
     /**
-     * Kredi kart numarasının geçerliliğini kontrol eden method
+     * Kredi kart numarasının geçerliliğini kontrol eden method.
      *
      * @return bool
      */
@@ -35,33 +39,36 @@ class BasePos {
     }
 
     /**
-     * Kredi kart son kullanma tarihinin geçerliliğini kontrol eden method
+     * Kredi kart son kullanma tarihinin geçerliliğini kontrol eden method.
      *
      * @return bool
      */
     protected function sonKullanmaTarihiKontrolleri()
     {
         // 4 karakter ve numerik
-        if ( ! preg_match('/^[0-9]{4}$/', $this->sonKullanmaTarihi))
+        if (!preg_match('/^[0-9]{4}$/', $this->sonKullanmaTarihi)) {
             return false;
+        }
 
         // Ay kontrolü
         // 1-12 arası olmak zorunda
         $ay = (int) substr($this->sonKullanmaTarihi, 0, 2);
-        if ($ay > 12 or $ay <= 0)
+        if ($ay > 12 or $ay <= 0) {
             return false;
+        }
 
         // Yıl kontrolü
         // Geçmiş yıl olamaz
         $yil = (int) substr($this->sonKullanmaTarihi, 2, 2);
-        if ($yil < date('y'))
+        if ($yil < date('y')) {
             return false;
+        }
 
         return true;
     }
 
     /**
-     * Kredi kartı güvenlik kodunun geçerliliğini kontrol eden method
+     * Kredi kartı güvenlik kodunun geçerliliğini kontrol eden method.
      *
      * @return bool
      */
@@ -71,7 +78,7 @@ class BasePos {
     }
 
     /**
-     * Sipriş için girilen tüm verileri kontrol eden method
+     * Sipriş için girilen tüm verileri kontrol eden method.
      *
      * @return bool
      */
@@ -81,7 +88,7 @@ class BasePos {
     }
 
     /**
-     * Girilen sipariş tutarını kontrol eden method
+     * Girilen sipariş tutarını kontrol eden method.
      *
      * @return bool
      */
@@ -91,12 +98,12 @@ class BasePos {
     }
 
     /**
-     * Girilen sipariş ID'sini kontrol eden method
+     * Girilen sipariş ID'sini kontrol eden method.
      *
      * @return bool
      */
     protected function siparisIDKontrolleri()
     {
-        return ! empty($this->siparisID);
+        return !empty($this->siparisID);
     }
 }

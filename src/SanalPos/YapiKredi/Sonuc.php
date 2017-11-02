@@ -1,19 +1,21 @@
-<?php namespace SanalPos\YapiKredi;
+<?php
 
-use \Posnet;
+namespace SanalPos\YapiKredi;
+
+use Posnet;
 
 /**
- * POSSonuc interfacei ile Yapı Kredi POS döngüleri 
+ * POSSonuc interfacei ile Yapı Kredi POS döngüleri.
  */
-class Sonuc implements \SanalPos\PosSonucInterface {
+class Sonuc implements \SanalPos\PosSonucInterface
+{
     public $posnet;
 
     /**
      * Verileri RAW nesnesi olarak tutmaktansa
-     * Posnet nesnesi daha kullanışlı
+     * Posnet nesnesi daha kullanışlı.
      *
      * @param Posnet
-     * @return void
      */
     public function __construct(Posnet $posnet)
     {
@@ -29,9 +31,9 @@ class Sonuc implements \SanalPos\PosSonucInterface {
     {
         return array(
                 array(
-                    'kod'   => $this->posnet->GetResponseCode(),
-                    'mesaj' => $this->posnet->GetResponseText()
-                )
+                    'kod' => $this->posnet->GetResponseCode(),
+                    'mesaj' => $this->posnet->GetResponseText(),
+                ),
             );
     }
 

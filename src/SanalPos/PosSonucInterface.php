@@ -1,11 +1,14 @@
-<?php namespace SanalPos;
+<?php
+
+namespace SanalPos;
 
 /**
- * Bankadan gelen döngüler
+ * Bankadan gelen döngüler.
  */
-interface PosSonucInterface {
+interface PosSonucInterface
+{
     /**
-     * Sonuç başarılı mı değil mi
+     * Sonuç başarılı mı değil mi.
      *
      * @return bool Sonuç başarılı mı değil mi
      */
@@ -20,9 +23,9 @@ interface PosSonucInterface {
     public function hataMesajlari();
 
     /**
-     * Bankadan gelen ve hiç değişmeyecek içerik
+     * Bankadan gelen ve hiç değişmeyecek içerik.
      *
      * @return string Gelen ham veri
      */
     public function raw();
-} 
+}

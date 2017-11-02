@@ -1,19 +1,22 @@
-<?php namespace SanalPos\YapiKredi;
+<?php
+
+namespace SanalPos\YapiKredi;
 
 use SanalPos\BasePos;
-use \Posnet;
+use Posnet;
 
 /**
- * Yapı Kredi için sanal POS
+ * Yapı Kredi için sanal POS.
  */
-class Pos extends BasePos implements \SanalPos\PosInterface {
+class Pos extends BasePos implements \SanalPos\PosInterface
+{
     protected $posnet;
 
     /**
-     * Banka ayarları
+     * Banka ayarları.
      */
     protected $hostlar = array(
-            'test'       => 'http://setmpos.ykb.com/PosnetWebService/XML',
+            'test' => 'http://setmpos.ykb.com/PosnetWebService/XML',
             'production' => 'https://www.posnet.ykb.com/PosnetWebService/XML',
             'test_3d' => 'setmpos.ykb.com/3DSWebService/YKBPaymentService',
             'production_3d' => 'posnet.ykb.com/3DSWebService/YKBPaymentService',
@@ -23,24 +26,24 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
     protected $terminalID;
 
     /**
-     * Kart bilgileri
+     * Kart bilgileri.
      */
     protected $kartNo;
     protected $sonKullanmaTarihi;
     protected $cvc;
 
-    /** 
-     * Sipariş bilgileri
+    /**
+     * Sipariş bilgileri.
      */
     protected $tutar;
     protected $siparisID;
     protected $taksit;
 
     /**
-     * Bağlantı ayarları
+     * Bağlantı ayarları.
      */
     public $baglantiAyarlari = array(
-            'timeOut' => 30
+            'timeOut' => 30,
         );
 
     /**
@@ -48,9 +51,9 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
      * belirlemek için kullanılıyor.
      *
      * @param \Posnet|\PosnetOOS $posnet
-     * @param string $musteriID
-     * @param string $terminalID
-     * @param string $environment
+     * @param string             $musteriID
+     * @param string             $terminalID
+     * @param string             $environment
      */
     public function __construct($posnet, $musteriID, $terminalID, $environment = 'production')
     {
@@ -58,45 +61,42 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
         $this->posnet = $posnet;
 
         // Banka giriş verileri
-        $this->musteriID  = $musteriID;
+        $this->musteriID = $musteriID;
         $this->terminalID = $terminalID;
-        $this->host       = $this->hostlar[$environment];
+        $this->host = $this->hostlar[$environment];
     }
 
     /**
-     * Kredi kartı ayarlarını yap
+     * Kredi kartı ayarlarını yap.
      *
      * @param string $kartNo
      * @param string $sonKullanmaTarihi
      * @param string $cvc
-     * @return void
      */
     public function krediKartiAyarlari($kartNo, $sonKullanmaTarihi, $cvc)
     {
-        $this->kartNo            = $kartNo;
+        $this->kartNo = $kartNo;
         $this->sonKullanmaTarihi = $sonKullanmaTarihi;
-        $this->cvc               = $cvc;
+        $this->cvc = $cvc;
     }
 
     /**
-     * Sipariş ayarlarını belirle
+     * Sipariş ayarlarını belirle.
      *
-     * @param float $tutar
+     * @param float  $tutar
      * @param string $siparisID
-     * @return void
      */
-    public function siparisAyarlari($tutar, $siparisID, $taksit,$extra)
+    public function siparisAyarlari($tutar, $siparisID, $taksit, $extra)
     {
-        $this->tutar     = $tutar;
+        $this->tutar = $tutar;
         $this->siparisID = $siparisID;
-        $this->taksit    = $taksit;
+        $this->taksit = $taksit;
     }
 
     /**
-     * Bağlantı ayarlarını düzenle
+     * Bağlantı ayarlarını düzenle.
      *
      * @param array $yeniAyarlar
-     * @return void
      */
     public function baglantiAyarlari($yeniAyarlar)
     {
@@ -104,15 +104,15 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
     }
 
     /**
-     * Ayarları yapılan ödemeyi gerçekleştir
+     * Ayarları yapılan ödemeyi gerçekleştir.
      *
      * @return PosSonucInterface|\PosnetOOSResponse
      */
     public function odeme()
     {
         // Kontrol yapmadan deneme yapan olabilir
-       # if ( ! $this->dogrula())
-        #    throw new \InvalidArgumentException;
+       // if ( ! $this->dogrula())
+        //    throw new \InvalidArgumentException;
 
         // Bankaya post edilecek veriler
         $kur = 'YT';
@@ -121,7 +121,7 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
         $tutar = number_format($this->tutar, 2, '', '');
 
         // Son kullanma tarihi formatı
-        $sktAy  = substr($this->sonKullanmaTarihi, 0, 2);
+        $sktAy = substr($this->sonKullanmaTarihi, 0, 2);
         $sktYil = substr($this->sonKullanmaTarihi, 4, 2);
 
         $this->posnet->SetURL($this->host);
@@ -129,7 +129,7 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
         $this->posnet->SetTid($this->terminalID);
         $this->posnet->DoSaleTran(
             $this->kartNo,
-            $sktYil . $sktAy,
+            $sktYil.$sktAy,
             $this->cvc,
             $this->siparisID,
             $tutar,
@@ -137,12 +137,11 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
             $this->taksit
         );
 
-        if($this->posnet instanceof \PosnetOOS){
+        if ($this->posnet instanceof \PosnetOOS) {
             return $this->posnet;
         }
 
         // Sonuç nesnesini oluştur
         return new Sonuc($this->posnet);
     }
-
 }

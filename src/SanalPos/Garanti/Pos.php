@@ -5,17 +5,17 @@ namespace SanalPos\Garanti;
 use SanalPos\BasePos;
 
 /**
- * Garanti için 3D'siz sanal POS
+ * Garanti için 3D'siz sanal POS.
  */
-class Pos extends BasePos implements \SanalPos\PosInterface {
-
+class Pos extends BasePos implements \SanalPos\PosInterface
+{
     /**
-     * POS bilgileri
+     * POS bilgileri.
      */
     private $adres = 'https://sanalposprov.garanti.com.tr/VPServlet';
 
     /**
-     * Banka bilgileri
+     * Banka bilgileri.
      */
     protected $isyeri;
     protected $terminal;
@@ -23,19 +23,19 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
     protected $parola;
 
     /**
-     * Environment
+     * Environment.
      */
     protected $test;
 
     /**
-     * Kart bilgileri
+     * Kart bilgileri.
      */
     protected $kartNo;
     protected $sonKullanmaTarihi;
     protected $cvc;
 
     /**
-     * Sipariş bilgileri
+     * Sipariş bilgileri.
      */
     protected $tutar;
     protected $siparisID;
@@ -45,14 +45,14 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
      * Est nesnesinin injectionı, sanal pos bilgileri ve environment
      * belirlemek için kullanılıyor.
      *
-     * @param Est $est
+     * @param Est    $est
      * @param string $isyeri
      * @param string $terminal
      * @param string $kullanici
      * @param string $parola
-     * @return void
      */
-    public function __construct($isyeri, $terminal, $kullanici, $parola, $environment = 'PROD') {
+    public function __construct($isyeri, $terminal, $kullanici, $parola, $environment = 'PROD')
+    {
         $this->isyeri = $isyeri;
         $this->terminal = $terminal;
         $this->kullanici = $kullanici;
@@ -61,50 +61,49 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
     }
 
     /**
-     * Kredi kartı ayarlarını yap
+     * Kredi kartı ayarlarını yap.
      *
      * @param string $kartNo
      * @param string $sonKullanmaTarihi
      * @param string $cvc
-     * @return void
      */
-    public function krediKartiAyarlari($kartNo, $sonKullanmaTarihi, $cvc) {
+    public function krediKartiAyarlari($kartNo, $sonKullanmaTarihi, $cvc)
+    {
         $this->kartNo = $kartNo;
         $this->sonKullanmaTarihi = $sonKullanmaTarihi;
         $this->cvc = $cvc;
     }
 
     /**
-     * Sipariş ayarlarını belirle
+     * Sipariş ayarlarını belirle.
      *
-     * @param float $tutar
+     * @param float  $tutar
      * @param string $siparisID
-     * @return void
      */
-    public function siparisAyarlari($tutar, $siparisID, $taksit, $extra) {
+    public function siparisAyarlari($tutar, $siparisID, $taksit, $extra)
+    {
         $this->tutar = $tutar;
         $this->siparisID = $siparisID;
         $this->taksit = $taksit;
     }
 
     /**
-     * Ayarları yapılan ödemeyi gerçekleştir
+     * Ayarları yapılan ödemeyi gerçekleştir.
      *
      * @return PosSonucInterface
      */
-    public function odeme() {
-
+    public function odeme()
+    {
         // Verileri garantiye uygun hale getir
         $tutar = $this->tutar * 100;
         $taksit = $this->taksit > 1 ? $this->taksit : '';
-
 
         $sktAy = substr($this->sonKullanmaTarihi, 0, 2);
         $sktYil = substr($this->sonKullanmaTarihi, 4, 2);
 
         // HASH
-        $SecurityData = strtoupper(sha1($this->parola . str_pad($this->terminal, 9, '0', STR_PAD_LEFT)));
-        $hash = strtoupper(sha1($this->siparisID . $this->terminal . $this->kartNo . $tutar . $SecurityData));
+        $SecurityData = strtoupper(sha1($this->parola.str_pad($this->terminal, 9, '0', STR_PAD_LEFT)));
+        $hash = strtoupper(sha1($this->siparisID.$this->terminal.$this->kartNo.$tutar.$SecurityData));
 
         $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
         <GVPSRequest>
@@ -142,24 +141,25 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
         ";
 
         $cevap = $this->xmlGonder($xml);
-        
- 
+
         // Sonuç nesnesini oluştur
         return new Sonuc($cevap);
     }
 
     /**
-     * Verilen XML'i Garanti'ye gönderip cevabı döndüren method
+     * Verilen XML'i Garanti'ye gönderip cevabı döndüren method.
      *
      * @param string $xml Gönderilecek xml
+     *
      * @return string $xml
      */
-    function xmlGonder($xml) {
+    public function xmlGonder($xml)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->adres);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "data=" . $xml);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'data='.$xml);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         $cevap = curl_exec($ch);
@@ -167,5 +167,4 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
 
         return $cevap;
     }
-
 }

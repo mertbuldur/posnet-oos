@@ -1,24 +1,24 @@
-<?php namespace SanalPos\Garanti;
+<?php
 
-use \SimpleXMLElement;
+namespace SanalPos\Garanti;
 
 /**
- * POSSonuc interfacei ile Yapı Kredi POS döngüleri 
+ * POSSonuc interfacei ile Yapı Kredi POS döngüleri.
  */
-class Sonuc implements \SanalPos\PosSonucInterface {
+class Sonuc implements \SanalPos\PosSonucInterface
+{
     public $orijinalXml;
     public $xml;
 
     /**
-     * Garanti'den gelen sonuç dizisini kaydet
+     * Garanti'den gelen sonuç dizisini kaydet.
      *
      * @param string $xml
-     * @return void
      */
     public function __construct($xml)
     {
         $this->orijinalXml = $xml;
-        $this->xml         = new \SimpleXMLElement($xml);
+        $this->xml = new \SimpleXMLElement($xml);
     }
 
     public function basariliMi()
@@ -30,9 +30,9 @@ class Sonuc implements \SanalPos\PosSonucInterface {
     {
         return array(
                 array(
-                    'kod'   => $this->xml->Transaction->Response->Code[0] ,
-                    'mesaj' => $this->xml->Transaction->Response->ErrorMsg[0] 
-                )
+                    'kod' => $this->xml->Transaction->Response->Code[0],
+                    'mesaj' => $this->xml->Transaction->Response->ErrorMsg[0],
+                ),
             );
     }
 

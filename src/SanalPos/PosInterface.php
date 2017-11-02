@@ -1,32 +1,33 @@
-<?php namespace SanalPos;
+<?php
+
+namespace SanalPos;
 
 /**
- * Sanal POS Interface
+ * Sanal POS Interface.
  *
  * Bundan sonra yazacağım POS'lara kalıp olması açısından bu projede dahil ediyorum. 
  */
-interface PosInterface {
+interface PosInterface
+{
     /**
-     * Kredi kartı ayarları
+     * Kredi kartı ayarları.
      *
-     * @param integer $kartNo
-     * @param integer $sonKullanmaTarihi (MMYY)
-     * @param integer $cvc
-     * @return void
+     * @param int $kartNo
+     * @param int $sonKullanmaTarihi (MMYY)
+     * @param int $cvc
      */
     public function krediKartiAyarlari($kartNo, $sonKullanmaTarihi, $cvc);
 
     /**
-     * Sipariş ayarları
+     * Sipariş ayarları.
      *
-     * @param float $miktar
+     * @param float  $miktar
      * @param string $siparisID
-     * @return void
      */
-    public function siparisAyarlari($miktar, $siparisID, $taksit,$extra);
+    public function siparisAyarlari($miktar, $siparisID, $taksit, $extra);
 
     /** 
-     * Girilen kredi kartı gibi verilerin bankaya göndermeden önce doğrulaması
+     * Girilen kredi kartı gibi verilerin bankaya göndermeden önce doğrulaması.
      * 
      * @return bool
      */
@@ -43,7 +44,7 @@ interface PosInterface {
      */
     public function odeme();
 
-    /**
+    /*
      * Sonradan eklenebilecek özellikler
      *
      * public function preAuth();

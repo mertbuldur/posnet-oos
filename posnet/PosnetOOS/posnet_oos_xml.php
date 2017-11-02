@@ -4,50 +4,51 @@
      *
      */
 
-    /**
-     * @package posnet oos
-     */
-
-    if (!defined('POSNET_MODULES_DIR')) define('POSNET_MODULES_DIR', dirname(__FILE__) . '/..');
+    if (!defined('POSNET_MODULES_DIR')) {
+        define('POSNET_MODULES_DIR', dirname(__FILE__).'/..');
+    }
 
     // Include posnet helper library
-    require_once('posnet_oos_struct.php');
+    require_once 'posnet_oos_struct.php';
     // Include the xml library
-    require_once(POSNET_MODULES_DIR . '/XML/xml.php');
+    require_once POSNET_MODULES_DIR.'/XML/xml.php';
 
-    class PosnetOOSXML extends XML {
-         
+    class PosnetOOSXML extends XML
+    {
         /**
-         * Error message for XML parsing
-         * @access private
+         * Error message for XML parsing.
          */
-        var $error;
-         
+        public $error;
+
         /**
-         * Constructor
+         * Constructor.
+         *
          * @param string $error
          */
-        Function __construct() {
+        public function __construct()
+        {
             parent::__construct();
-			$this->error = "";
+            $this->error = '';
         }
-         
+
         /**
          * This function is used to set errors like XML parser errors.
+         *
          * @param string $error
          */
-        Function SetError($error) {
+        public function SetError($error)
+        {
             $this->error = $error;
         }
-         
-        /**
-         * This function is used to create POSNET XML Header Nodes
-         * @param MerchantInfo $merchantInfo
-         * @param XMLNode &$node_posnetRequest
-         * @access protected
-         */
-        Function CreateXMLForHeader($merchantInfo, &$node_posnetRequest) {
 
+        /**
+         * This function is used to create POSNET XML Header Nodes.
+         *
+         * @param MerchantInfo $merchantInfo
+         * @param XMLNode      &$node_posnetRequest
+         */
+        public function CreateXMLForHeader($merchantInfo, &$node_posnetRequest)
+        {
             $this->xmlDecl = '<?xml version="1.0" encoding="ISO-8859-9"?>';
 
             $node_posnetRequest = $this->createElement('posnetRequest');
@@ -75,21 +76,22 @@
         }
 
         /**
-         * This function is used to create POSNET XML Transaction Nodes for each transaction type
-         * @param MerchantInfo $merchantInfo
+         * This function is used to create POSNET XML Transaction Nodes for each transaction type.
+         *
+         * @param MerchantInfo  $merchantInfo
          * @param PosnetRequest $posnetRequest
-         * @param string $trantype
+         * @param string        $trantype
+         *
          * @return string
-         * @access protected
          */
-        Function CreateXMLForPosnetOOSTransaction($merchantInfo, $posnetOOSRequest, $reqcode) {
-
+        public function CreateXMLForPosnetOOSTransaction($merchantInfo, $posnetOOSRequest, $reqcode)
+        {
             //Create Header
             $this->CreateXMLForHeader($merchantInfo, $node_posnetOOSRequest);
 
             //Create Transaction XML Packet
-            switch(strtolower($reqcode)) {
-                case "0" :
+            switch (strtolower($reqcode)) {
+                case '0':
                 {
                     $node_tran = $this->createElement('oosRequestData');
                     $node_posnetOOSRequest->appendChild($node_tran);
@@ -113,7 +115,7 @@
                     $node_cvcTextNode = $this->createTextNode($posnetOOSRequest->cvc);
                     $node_cvc->appendChild($node_cvcTextNode);
                     $node_tran->appendChild($node_cvc);
-                    
+
                     $node_amount = $this->createElement('amount');
                     $node_amountTextNode = $this->createTextNode($posnetOOSRequest->amount);
                     $node_amount->appendChild($node_amountTextNode);
@@ -146,7 +148,7 @@
 
                     break;
                 }
-                case "1" :
+                case '1':
                 {
                     $node_tran = $this->createElement('oosResolveMerchantData');
                     $node_posnetOOSRequest->appendChild($node_tran);
@@ -168,7 +170,7 @@
 
                     break;
                 }
-                case "2" :
+                case '2':
                 {
                     $node_tran = $this->createElement('oosTranData');
                     $node_posnetOOSRequest->appendChild($node_tran);
@@ -183,7 +185,7 @@
                     $node_merchantData->appendChild($node_merchantDataTextNode);
                     $node_tran->appendChild($node_merchantData);
 
-		    $node_sign = $this->createElement('sign');
+            $node_sign = $this->createElement('sign');
                     $node_signTextNode = $this->createTextNode($posnetOOSRequest->sign);
                     $node_sign->appendChild($node_signTextNode);
                     $node_tran->appendChild($node_sign);
@@ -192,24 +194,27 @@
                     $node_wpAmountTextNode = $this->createTextNode($posnetOOSRequest->wpAmount);
                     $node_wpAmount->appendChild($node_wpAmountTextNode);
                     $node_tran->appendChild($node_wpAmount);
-                                        
+
                     break;
                 }
                 default:
-                    $this->SetError("Invalid trantype");
-                return "";
+                    $this->SetError('Invalid trantype');
+
+                return '';
             }
 
             return $this->toString();
         }
 
         /**
-         * This function is used to parse POSNET XML Response
+         * This function is used to parse POSNET XML Response.
+         *
          * @param string $strXMLData
+         *
          * @return string
          */
-        Function ParseXMLForPosnetOOSTransaction($strXMLData) {
+        public function ParseXMLForPosnetOOSTransaction($strXMLData)
+        {
             return $this->parseXML($strXMLData);
         }
-    };
-?>
+    }
