@@ -57,8 +57,9 @@
         public $nodeType;
 
         // XMLNode constructor --------------------------------------------------
-        public function XMLNode()
+        public function __construct()
         {
+            parent::__construct();
             // Init properties
             $this->attributes = null;
             $this->childNodes = null;
@@ -314,10 +315,10 @@
         public $xmlDecl;
 
         // XML constructor ------------------------------------------------------
-        public function XML($url = '')
+        public function __construct($url = '')
         {
             // Init external properties
-            parent::XMLNode();
+            parent::__construct();
             $this->status = 0;
             $this->error = '';
             $this->version = '1.0';

@@ -671,7 +671,7 @@
         }
 
         /**
-         * It is used for setting koicode for Joker Vadaa. 
+         * It is used for setting koicode for Joker Vadaa.
          * Available koicodes can be inqueried by DoKOIInquiryTran function.
          *
          *  1	Ek Taksit
