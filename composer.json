@@ -2,8 +2,8 @@
     "name": "ekrembk/sanal-pos",
     "description": "EST ve Posnet destekli sanal pos paketi. Desteklenen bankalar: Akbank, Finansbank, Halkbank, Türkiye İş Bankası, Anadolubank ve Yapı Kredi.",
     "keywords": ["pos", "est", "posnet", "payment"],
-    "homepage": "http://github.com/ekrembk/sanal-pos",
-    "licence": "MIT",
+    "homepage": "http://github.com/shibby/ekrembk-sanal-pos",
+    "license": "MIT",
     "authors": [
         {
             "name": "Ekrem Büyükkaya",
@@ -19,7 +19,10 @@
         "mockery/mockery": "dev-master@dev"
     },
     "autoload": {
-        "files": ["vendor/posnet/Posnet XML/posnet.php"],
+        "files": [
+            "vendor/posnet/Posnet XML/posnet.php",
+            "vendor/posnet/Posnet OOS/posnet_oos.php"
+        ],
         "psr-0": {"SanalPos": "src/"}
     }
 }

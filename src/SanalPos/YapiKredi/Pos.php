@@ -14,7 +14,9 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
      */
     protected $hostlar = array(
             'test'       => 'http://setmpos.ykb.com/PosnetWebService/XML',
-            'production' => 'https://www.posnet.ykb.com/PosnetWebService/XML'
+            'production' => 'https://www.posnet.ykb.com/PosnetWebService/XML',
+            'test_3d' => 'setmpos.ykb.com/3DSWebService/YKBPaymentService',
+            'production_3d' => 'posnet.ykb.com/3DSWebService/YKBPaymentService',
         );
     protected $host;
     protected $musteriID;
@@ -45,13 +47,12 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
      * Posnet nesnesinin injectionı, sanal pos bilgileri ve environment
      * belirlemek için kullanılıyor.
      *
-     * @param Posnet $posnet
+     * @param \Posnet|\PosnetOOS $posnet
      * @param string $musteriID
      * @param string $terminalID
      * @param string $environment
-     * @return void
      */
-    public function __construct(Posnet $posnet, $musteriID, $terminalID, $environment = 'production')
+    public function __construct($posnet, $musteriID, $terminalID, $environment = 'production')
     {
         // Posnet injection
         $this->posnet = $posnet;
@@ -105,7 +106,7 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
     /**
      * Ayarları yapılan ödemeyi gerçekleştir
      *
-     * @return PosSonucInterface
+     * @return PosSonucInterface|\PosnetOOSResponse
      */
     public function odeme()
     {
@@ -135,6 +136,10 @@ class Pos extends BasePos implements \SanalPos\PosInterface {
             $kur,
             $this->taksit
         );
+
+        if($this->posnet instanceof \PosnetOOS){
+            return $this->posnet;
+        }
 
         // Sonuç nesnesini oluştur
         return new Sonuc($this->posnet);

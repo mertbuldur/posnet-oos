@@ -2,3 +2,4 @@ vendor/*
 !vendor/posnet
 composer.phar
 composer.lock
+.idea
