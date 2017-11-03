@@ -1,5 +1,5 @@
 {
-  "name": "ekrembk/sanal-pos",
+  "name": "shibby/ekrembk-sanal-pos",
   "description": "EST ve Posnet destekli sanal pos paketi. Desteklenen bankalar: Akbank, Finansbank, Halkbank, Türkiye İş Bankası, Anadolubank ve Yapı Kredi.",
   "keywords": [
     "pos",
@@ -14,6 +14,11 @@
       "name": "Ekrem Büyükkaya",
       "email": "ebuyukkaya@gmail.com",
       "homepage": "http://ekrembk.com"
+    },
+    {
+      "name": "Güven Atbakan",
+      "email": "guvenatbakan@gmail.com",
+      "homepage": "https://guven.atbakan.com"
     }
   ],
   "require": {
