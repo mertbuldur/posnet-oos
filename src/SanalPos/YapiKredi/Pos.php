@@ -16,11 +16,11 @@ class Pos extends BasePos implements \SanalPos\PosInterface
      * Banka ayarları.
      */
     protected $hostlar = array(
-            'test' => 'http://setmpos.ykb.com/PosnetWebService/XML',
-            'production' => 'https://www.posnet.ykb.com/PosnetWebService/XML',
-            'test_3d' => 'setmpos.ykb.com/3DSWebService/YKBPaymentService',
-            'production_3d' => 'posnet.ykb.com/3DSWebService/YKBPaymentService',
-        );
+        'test' => 'http://setmpos.ykb.com/PosnetWebService/XML',
+        'production' => 'https://www.posnet.ykb.com/PosnetWebService/XML',
+        'test_3d' => 'http://setmpos.ykb.com/3DSWebService/YKBPaymentService',
+        'production_3d' => 'http://posnet.ykb.com/3DSWebService/YKBPaymentService',
+    );
     protected $host;
     protected $musteriID;
     protected $terminalID;
@@ -43,8 +43,8 @@ class Pos extends BasePos implements \SanalPos\PosInterface
      * Bağlantı ayarları.
      */
     public $baglantiAyarlari = array(
-            'timeOut' => 30,
-        );
+        'timeOut' => 30,
+    );
 
     /**
      * Posnet nesnesinin injectionı, sanal pos bilgileri ve environment
@@ -111,7 +111,7 @@ class Pos extends BasePos implements \SanalPos\PosInterface
     public function odeme()
     {
         // Kontrol yapmadan deneme yapan olabilir
-       // if ( ! $this->dogrula())
+        // if ( ! $this->dogrula())
         //    throw new \InvalidArgumentException;
 
         // Bankaya post edilecek veriler
@@ -127,15 +127,30 @@ class Pos extends BasePos implements \SanalPos\PosInterface
         $this->posnet->SetURL($this->host);
         $this->posnet->SetMid($this->musteriID);
         $this->posnet->SetTid($this->terminalID);
-        $this->posnet->DoSaleTran(
-            $this->kartNo,
-            $sktYil.$sktAy,
-            $this->cvc,
-            $this->siparisID,
-            $tutar,
-            $kur,
-            $this->taksit
-        );
+        if ($this->posnet instanceof \PosnetOOS) {
+            //$this->posnet->SetDebugLevel(1);
+            $result = $this->posnet->CreateTranRequestDatas(
+                'Kart holder name', //todo:
+                $tutar,
+                $kur,
+                $this->taksit,
+                $xid = str_random(20), //todo: laravel
+                $trantype = 'Sale', //sale?
+                $this->kartNo,
+                $sktYil.$sktAy,
+                $this->cvc
+            );
+        } else {
+            $this->posnet->DoSaleTran(
+                $this->kartNo,
+                $sktYil.$sktAy,
+                $this->cvc,
+                $this->siparisID,
+                $tutar,
+                $kur,
+                $this->taksit
+            );
+        }
 
         if ($this->posnet instanceof \PosnetOOS) {
             return $this->posnet;

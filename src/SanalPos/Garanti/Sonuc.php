@@ -29,11 +29,11 @@ class Sonuc implements \SanalPos\PosSonucInterface
     public function hataMesajlari()
     {
         return array(
-                array(
-                    'kod' => $this->xml->Transaction->Response->Code[0],
-                    'mesaj' => $this->xml->Transaction->Response->ErrorMsg[0],
-                ),
-            );
+            array(
+                'kod' => $this->xml->Transaction->Response->Code[0],
+                'mesaj' => $this->xml->Transaction->Response->ErrorMsg[0],
+            ),
+        );
     }
 
     public function raw()

@@ -27,11 +27,11 @@ class Sonuc implements \SanalPos\PosSonucInterface
     public function hataMesajlari()
     {
         return array(
-                array(
-                    'kod' => $this->estDongu['return_code'],
-                    'mesaj' => $this->estDongu['error_msg'],
-                ),
-            );
+            array(
+                'kod' => $this->estDongu['return_code'],
+                'mesaj' => $this->estDongu['error_msg'],
+            ),
+        );
     }
 
     public function raw()

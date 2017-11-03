@@ -1,12 +1,13 @@
 <?php namespace SanalPosTest\YapiKredi;
 
 /**
- * Yapı Kredi POS testleri 
+ * Yapı Kredi POS testleri
  */
-class PosTest extends \PHPUnit_Framework_TestCase {
+class PosTest extends \PHPUnit_Framework_TestCase
+{
     protected $pos;
 
-    public function setUp() 
+    public function setUp()
     {
         // POS Net mock
         $posnet = \Mockery::mock('Posnet');
@@ -14,12 +15,12 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->pos = new \SanalPos\YapiKredi\Pos($posnet, 'MUSTERIID', 'TERMINALID', 'test');
     }
 
-     public function tearDown()
+    public function tearDown()
     {
         \Mockery::close();
     }
 
-    public function testGecersizKrediKarti() 
+    public function testGecersizKrediKarti()
     {
         $this->pos->krediKartiAyarlari('GECERSIZKREDIKARTI', '1013', '123');
         $this->pos->siparisAyarlari(10.00, 'SIPARISID', 1);
@@ -27,7 +28,7 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->pos->dogrula());
     }
 
-    public function testGecersizSonKullanmaTarihiFormati() 
+    public function testGecersizSonKullanmaTarihiFormati()
     {
         $this->pos->krediKartiAyarlari('5431111111111111', '10211', '123');
         $this->pos->siparisAyarlari(10.00, 'SIPARISID', 1);
@@ -35,7 +36,7 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->pos->dogrula());
     }
 
-    public function testSonKullanmaTarihiGecersizAy() 
+    public function testSonKullanmaTarihiGecersizAy()
     {
         $this->pos->krediKartiAyarlari('5431111111111111', '1314', '123');
         $this->pos->siparisAyarlari(10.00, 'SIPARISID', 1);
@@ -43,7 +44,7 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->pos->dogrula());
     }
 
-    public function testGecmisSonKullanmaTarihi() 
+    public function testGecmisSonKullanmaTarihi()
     {
         $this->pos->krediKartiAyarlari('5431111111111111', '1012', '123');
         $this->pos->siparisAyarlari(10.00, 'SIPARISID', 1);
@@ -51,7 +52,7 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->pos->dogrula());
     }
 
-    public function testGecersizCCV() 
+    public function testGecersizCCV()
     {
         $this->pos->krediKartiAyarlari('5431111111111111', '1013', '1234');
         $this->pos->siparisAyarlari(10.00, 'SIPARISID', 1);
@@ -59,7 +60,7 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->pos->dogrula());
     }
 
-    public function testSifirHarcama() 
+    public function testSifirHarcama()
     {
         $this->pos->krediKartiAyarlari('5431111111111111', '1013', '123');
         $this->pos->siparisAyarlari(0.00, 'SIPARISID', 1);
@@ -67,7 +68,7 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->pos->dogrula());
     }
 
-    public function testGecerliSiparisDogrulama() 
+    public function testGecerliSiparisDogrulama()
     {
         $this->pos->krediKartiAyarlari('5431111111111111', '1013', '123');
         $this->pos->siparisAyarlari(10.00, 'SIPARISID', 1);
@@ -75,15 +76,15 @@ class PosTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($this->pos->dogrula());
     }
 
-    /** 
+    /**
      * @expectedException InvalidArgumentException
      */
-    public function testDogrulamadanOdemeDenemesi() 
+    public function testDogrulamadanOdemeDenemesi()
     {
         $this->pos->odeme();
     }
 
-    public function testAuthOdeme() 
+    public function testAuthOdeme()
     {
         // Özel mock
         $posnet = \Mockery::mock('Posnet');

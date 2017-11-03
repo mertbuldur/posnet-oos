@@ -79,9 +79,8 @@ class Pos extends BasePos implements \SanalPos\PosInterface
     {
         // Kontrol yapmadan deneme yapan olabilir
         if (!$this->dogrula()) {
-
-        // Verileri EST'ye uyumlu hale getir
-        $sktAy = substr($this->sonKullanmaTarihi, 0, 2);
+            // Verileri EST'ye uyumlu hale getir
+            $sktAy = substr($this->sonKullanmaTarihi, 0, 2);
         }
         $sktYil = substr($this->sonKullanmaTarihi, 4, 2);
         $tutar = number_format($this->tutar, 2, '.', '');

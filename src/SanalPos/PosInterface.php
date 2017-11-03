@@ -5,7 +5,7 @@ namespace SanalPos;
 /**
  * Sanal POS Interface.
  *
- * Bundan sonra yazacağım POS'lara kalıp olması açısından bu projede dahil ediyorum. 
+ * Bundan sonra yazacağım POS'lara kalıp olması açısından bu projede dahil ediyorum.
  */
 interface PosInterface
 {
@@ -26,9 +26,9 @@ interface PosInterface
      */
     public function siparisAyarlari($miktar, $siparisID, $taksit, $extra);
 
-    /** 
+    /**
      * Girilen kredi kartı gibi verilerin bankaya göndermeden önce doğrulaması.
-     * 
+     *
      * @return bool
      */
     public function dogrula();
@@ -49,7 +49,7 @@ interface PosInterface
      *
      * public function preAuth();
      * public function iade();
-     * public function iptal(); 
+     * public function iptal();
      * public function siparisDetaylari();
      */
 }
