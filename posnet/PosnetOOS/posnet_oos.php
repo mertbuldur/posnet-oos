@@ -66,9 +66,22 @@ class PosnetOOS
 
     /**
      * Constructor.
+     *
+     * @param $posnetId
+     * @param $mid
+     * @param $tid
+     * @param $username
+     * @param $password
+     * @param string $key
      */
-    public function __construct($posnetId, $mid, $tid, $username, $password)
-    {
+    public function __construct(
+        $posnetId,
+        $mid,
+        $tid,
+        $username,
+        $password,
+        $key = '10,10,10,10,10,10,10,10'
+    ) {
         $this->merchantInfo = new MerchantInfo();
         $this->strRequestXMLData = '';
         $this->strResponseXMLData = '';
@@ -81,7 +94,7 @@ class PosnetOOS
         //$this->SetUsername('USERNAME');
         $this->SetPassword($password);
         //$this->SetPassword('PASSWORD');
-        $this->SetKey('10,10,10,10,10,10,10,10');
+        $this->SetKey($key);
     }
 
     /**
