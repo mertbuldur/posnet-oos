@@ -17,7 +17,7 @@ class Pos extends BasePos implements \SanalPos\PosInterface
      */
     protected $hostlar = array(
         'test' => 'http://setmpos.ykb.com/PosnetWebService/XML',
-        'production' => 'https://www.posnet.ykb.com/PosnetWebService/XML',
+        'production' => 'https://posnet.ykb.com/PosnetWebService/XML',
         'test_3d' => 'http://setmpos.ykb.com/3DSWebService/YKBPaymentService',
         'production_3d' => 'http://posnet.ykb.com/3DSWebService/YKBPaymentService',
     );
