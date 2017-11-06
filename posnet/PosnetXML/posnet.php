@@ -49,7 +49,7 @@ class Posnet extends PosnetHTTPConection
     /**
      * Constructor.
      */
-    public function Posnet()
+    public function __construct()
     {
         $this->merchantInfo = new MerchantInfo();
         $this->strRequestXMLData = '';
