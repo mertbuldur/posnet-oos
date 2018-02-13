@@ -17,9 +17,9 @@ class PosnetENC
     public function __construct()
     {
         srand((float) microtime() * 10000000);
-        $this->block = mcrypt_get_block_size(MCRYPT_TripleDES, MCRYPT_MODE_CBC);
-        $this->td = mcrypt_module_open(MCRYPT_TripleDES, '', MCRYPT_MODE_CBC, '');
-        $this->ks = mcrypt_enc_get_key_size($this->td);
+        $this->block = @mcrypt_get_block_size(MCRYPT_TripleDES, MCRYPT_MODE_CBC);
+        $this->td = @mcrypt_module_open(MCRYPT_TripleDES, '', MCRYPT_MODE_CBC, '');
+        $this->ks = @mcrypt_enc_get_key_size($this->td);
         $this->error = '';
     }
 
@@ -53,10 +53,10 @@ class PosnetENC
         $data = $this->DoPadding($data);
 
         //Initialize
-        mcrypt_generic_init($this->td, $this->GetKey($key), $iv);
+        @mcrypt_generic_init($this->td, $this->GetKey($key), $iv);
 
         //Encrypt Data
-        $encrypted_data = mcrypt_generic($this->td, $data);
+        $encrypted_data = @mcrypt_generic($this->td, $data);
 
         //Add IV and Convert to HEX
         $hex_encrypted_data = strtoupper(bin2hex($iv)).strtoupper(bin2hex($encrypted_data));
@@ -89,10 +89,10 @@ class PosnetENC
             return '';
         }
         //Initialize
-        mcrypt_generic_init($this->td, $this->GetKey($key), $iv);
+        @mcrypt_generic_init($this->td, $this->GetKey($key), $iv);
 
         //Decrypt Data
-        $decrypted_data = mdecrypt_generic($this->td, $encrypted_data);
+        $decrypted_data = @mdecrypt_generic($this->td, $encrypted_data);
 
         //Remove Padded Data
         return $this->RemovePaddedData($decrypted_data);
@@ -154,7 +154,7 @@ class PosnetENC
 
     public function DeInit()
     {
-        mcrypt_generic_deinit($this->td);
-        mcrypt_module_close($this->td);
+        @mcrypt_generic_deinit($this->td);
+        @mcrypt_module_close($this->td);
     }
 }
