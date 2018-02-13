@@ -11,6 +11,8 @@ if (!defined('POSNET_MODULES_DIR')) {
 // Include the http library
 require_once POSNET_MODULES_DIR.'/HTTP/http.php';
 
+use Illuminate\Support\Facades\Log;
+
 class PosnetHTTPConection
 {
     /**
@@ -20,7 +22,7 @@ class PosnetHTTPConection
     /**
      * Used for debugging.
      */
-    public $debug = 0;
+    public $debug = 1;
     /**
      * Used for forcing OpenSSL.
      */
@@ -98,10 +100,8 @@ class PosnetHTTPConection
         }
 
         if ($this->debug) {
-            echo "<H2><LI>Opening connection to:</H2>\n<PRE>", htmlentities($arguments['HostName']), "</PRE>\n";
+            Log::info("Posnet - Opening connection to: " . htmlentities($arguments['HostName']));
         }
-
-        flush();
 
         return $http->Open($arguments);
     }
@@ -142,42 +142,32 @@ class PosnetHTTPConection
 
         if ($error == '') {
             if ($this->debug) {
-                echo "<H2><LI>Sending request for page:</H2>\n<PRE>";
-                echo htmlentities($arguments['RequestURI']), "\n";
+                Log::info("Posnet - Sending request for page: " . htmlentities($arguments['RequestURI']));
             }
-            if ($this->debug) {
-                echo "</PRE>\n";
-            }
-            flush();
 
             //Send
             $error = $http->SendRequest($arguments);
             if ($error == '') {
                 if ($this->debug) {
-                    echo "<H2><LI>Request:</LI</H2>\n<PRE>\n".htmlentities($http->request)."</PRE>\n";
+                    Log::info("Posnet - Request: " . htmlentities($http->request));
                 }
-
-                flush();
 
                 $headers = array();
                 //Read Response Headers
                 $error = $http->ReadReplyHeaders($headers);
                 if ($error == '') {
                     if ($this->debug) {
-                        echo "<H2><LI>Response status code:</LI</H2>\n<P>".$http->response_status;
+                        Log::info("Posnet - Response status code: " . $http->response_status);
                     }
                     switch ($http->response_status) {
                         case '301':
                         case '302':
                         case '303':
                         case '307':
-                            echo ' (redirect to <TT>'.$headers['location']."</TT>)<BR>\nSet the <TT>follow_redirect</TT> variable to handle redirect responses automatically.";
+                            Log::info("Posnet -  (redirect to  " .$headers['location'].") \nSet the follow_redirect variable to handle redirect responses automatically.");
                             break;
                     }
-                    if ($this->debug) {
-                        echo "</P>\n";
-                    }
-                    flush();
+
                     //Read Response Body
                     for (; ;) {
                         $error = $http->ReadReplyBody($body, 2000);
@@ -186,7 +176,6 @@ class PosnetHTTPConection
                         }
                         $strResponseData .= $body;
                     }
-                    flush();
                 }
             }
             $http->Close();
@@ -194,7 +183,7 @@ class PosnetHTTPConection
         if (strlen($error)) {
             $this->error = $error;
             if ($this->debug) {
-                echo '<CENTER><H2>Error: ', $error, "</H2></CENTER>\n";
+                Log::info("Posnet -  Error: $error");
             }
 
             return '';

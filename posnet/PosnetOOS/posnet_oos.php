@@ -17,6 +17,8 @@ require_once POSNET_MODULES_DIR.'/PosnetHTTP/posnet_http.php';
 // Include posnet encryption library
 require_once POSNET_MODULES_DIR.'/PosnetENC/posnet_enc.php';
 
+use Illuminate\Support\Facades\Log;
+
 class PosnetOOS
 {
     /**
@@ -57,7 +59,7 @@ class PosnetOOS
     /**
      * Used for debugging.
      */
-    public $debug = 0;
+    public $debug = 1;
 
     /**
      * Used for timezone setting.
@@ -299,9 +301,7 @@ class PosnetOOS
 
         // Show XML result
         if ($this->debug) {
-            echo "<H2><LI>XML creation:</LI</H2>\n<PRE>\n";
-            echo htmlspecialchars($this->strRequestXMLData);
-            echo "</PRE>\n";
+            Log::info("Posnet - XML creation: " . $this->strRequestXMLData);
         }
 
         // Send and Receive Data with HTTP
@@ -314,23 +314,19 @@ class PosnetOOS
         }
 
         if ($this->debug) {
-            echo "<H2><LI>Response body:</LI</H2>\n<PRE>\n";
-            echo htmlspecialchars($this->strResponseXMLData);
-            echo "</PRE>\n";
+            Log::info("Posnet - Response body: " . $this->strResponseXMLData);
         }
 
         //Parse Response XML
         $this->arrayPosnetResponseXML = $posnetOOSXML->ParseXMLForPosnetOOSTransaction($this->strResponseXMLData);
 
         if ($this->debug) {
-            echo "<H2><LI>Response XML Array :</LI</H2>\n<PRE>\n";
-            print_r($this->arrayPosnetResponseXML);
-            echo '</pre>';
+          Log::info("Posnet - Response XML Array: " . print_r($this->arrayPosnetResponseXML, true));
         }
 
         if (count($this->arrayPosnetResponseXML) == 0) {
             if ($this->debug) {
-                echo "<H2><LI>Unable to parse XML !</LI</H2>\n<PRE>\n";
+                Log::info("Posnet - Unable to parse XML !");
             }
             $this->posnetOOSResponse->errorcode = '999';
             $this->posnetOOSResponse->errormessage = 'XML Parse Error : '.$posnetOOSXML->error;
@@ -377,7 +373,7 @@ class PosnetOOS
             $this->posnetOOSResponse->errorcode = '444';
             $this->posnetOOSResponse->errormessage = 'IMZA GECERLI DEGIL ('.$hash.')';
             if ($this->debug) {
-                echo $this->posnetOOSResponse->errormessage;
+                Log::info ("Posnet - Error: " . $this->posnetOOSResponse->errormessage);
             }
 
             return false;
@@ -401,7 +397,7 @@ class PosnetOOS
             $this->posnetOOSResponse->errorcode = '444';
             $this->posnetOOSResponse->errormessage = 'ISLEM ZAMANI UYUMSUZ';
             if ($this->debug) {
-                echo $this->posnetOOSResponse->errormessage;
+                Log::info ("Posnet - Error: " . $this->posnetOOSResponse->errormessage);
             }
 
             return false;
@@ -410,7 +406,7 @@ class PosnetOOS
             $this->posnetOOSResponse->errorcode = '444';
             $this->posnetOOSResponse->errormessage = 'MID TID UYUMSUZ';
             if ($this->debug) {
-                echo $this->posnetOOSResponse->errormessage;
+                Log::info ("Posnet - Error: " . $this->posnetOOSResponse->errormessage);
             }
 
             return false;
@@ -567,12 +563,11 @@ class PosnetOOS
             $posnetENC->DeInit();
 
             if ($this->debug) {
-                echo '<br>Decryptyed Data : '.$decryptedData.'<BR>';
+                Log::info ("Posnet - Decryptyed Data: " . $decryptedData);
             }
 
             if ($decryptedData == '') {
                 $this->posnetOOSResponse->errormessage = $posnetENC->error;
-
                 return false;
             }
 

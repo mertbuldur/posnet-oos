@@ -7,23 +7,12 @@
     "posnet",
     "payment"
   ],
-  "homepage": "http://github.com/shibby/ekrembk-sanal-pos",
+  "homepage": "http://github.com/hasandz/posnet-oos",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Ekrem Büyükkaya",
-      "email": "ebuyukkaya@gmail.com",
-      "homepage": "http://ekrembk.com"
-    },
-    {
-      "name": "Güven Atbakan",
-      "email": "guvenatbakan@gmail.com",
-      "homepage": "https://guven.atbakan.com"
-    }
-  ],
   "require": {
-    "php": ">=5.3.0",
-    "ozgur/est": "dev-master"
+    "php": ">=7.0",
+    "ozgur/est": "dev-master",
+    "illuminate/support": "5.5.*",
   },
   "require-dev": {
     "mockery/mockery": "dev-master@dev"
