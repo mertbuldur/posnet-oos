@@ -1,5 +1,5 @@
 {
-  "name": "shibby/ekrembk-sanal-pos",
+  "name": "hasandz/posnet-oos",
   "description": "EST ve Posnet destekli sanal pos paketi. Desteklenen bankalar: Akbank, Finansbank, Halkbank, Türkiye İş Bankası, Anadolubank ve Yapı Kredi.",
   "keywords": [
     "pos",
